@@ -49,6 +49,6 @@ If there's a better way to do it, tell me about it.  Lets give it a shot.
 
 | Command | Status |
 |---------|--------|
-| true | It works flawlessly.  100% compatible.  I'm AMAZING. |
+| true | It works flawlessly.  100% compatible.  AMAZING! |
 | yes | It works!  I have a question about flushing. |
 | Everything else | Who cares? Oh, you do? Then update this file, dangit! I'm a doctor, not a technical writer, Jim. |

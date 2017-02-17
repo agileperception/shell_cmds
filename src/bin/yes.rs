@@ -1,5 +1,3 @@
-/*	$NetBSD: yes.c,v 1.5 1997/10/19 14:28:27 mrg Exp $	*/
-
 /*
  * Copyright (c) 1987, 1993
  *	The Regents of the University of California.  All rights reserved.
@@ -42,7 +40,6 @@ fn main() {
     };
     loop {
         println!("{}", string_to_print);
-        // Q: Does Rust flush at the newline like C, or do I need to manually flush here? - CleanCut
     }
 }
 
