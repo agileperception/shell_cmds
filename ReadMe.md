@@ -1,4 +1,4 @@
-# Rust for the fun of it!
+# Port Apple's BSD shell_cmds - aka Rust for the fun of it!
 
 It's fun to learn Rust by porting stuff to Rust.  This is my project to port a
 bunch of Apple's BSD utilities so I can have fun and learn.  And have fun.  And
