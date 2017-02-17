@@ -19,6 +19,7 @@ dang issue, or join me on my
 - Lets use [clap](https://crates.io/crates/clap) for command-line-arguments, because it's more fun.
 - Lets make unit tests.  Running tests is fun.
 - Anyone know what to do with a man page (the .1 files)?  Do you just...use it as-is?
+- Better copy-n-paste the license from the original. Lawyer repellent.
 
 
 # FAQ
