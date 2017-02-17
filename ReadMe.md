@@ -47,53 +47,53 @@ If there's a better way to do it, tell me about it.  Lets give it a shot.
 
 # Status of Stuff
 
-| Command | Status |
-|---------|--------|
-| alias | |
-| apply | |
-| basename | |
-| chroot | |
-| date | |
-| dirname | |
-| echo | |
-| env | |
-| expr | |
-| false | |
-| find | |
-| getopt | |
-| hexdump | |
-| hostname | |
-| id | |
-| jot | |
-| kill | |
-| killall | |
-| lastcomm | |
-| locate | |
-| logname | |
-| mktemp | |
-| nice | |
-| nohup | |
-| path_helper | |
-| printenv | |
-| pwd | |
-| renice | |
-| script | |
-| seq | |
-| sh | |
-| shlock | |
-| sleep | |
-| su | |
-| systime | |
-| tee | |
-| test | |
-| time | |
-| true | It works flawlessly.  100% compatible.  AMAZING! |
-| uname | |
-| users | |
-| w | |
-| what | |
-| whereis | |
-| which | |
-| who | |
-| xargs | |
-| yes | It works! |
+| Done | Command | Comments |
+|------|---------|----------|
+| [ ] | alias | |
+| [ ] | apply | |
+| [ ] | basename | |
+| [ ] | chroot | |
+| [ ] | date | |
+| [ ] | dirname | |
+| [ ] | echo | |
+| [ ] | env | |
+| [ ] | expr | |
+| [x] | false | Simple. |
+| [ ] | find | |
+| [ ] | getopt | |
+| [ ] | hexdump | |
+| [ ] | hostname | |
+| [ ] | id | |
+| [ ] | jot | |
+| [ ] | kill | |
+| [ ] | killall | |
+| [ ] | lastcomm | |
+| [ ] | locate | |
+| [ ] | logname | |
+| [ ] | mktemp | |
+| [ ] | nice | |
+| [ ] | nohup | |
+| [ ] | path_helper | |
+| [ ] | printenv | |
+| [ ] | pwd | |
+| [ ] | renice | |
+| [ ] | script | |
+| [ ] | seq | |
+| [ ] | sh | |
+| [ ] | shlock | |
+| [ ] | sleep | |
+| [ ] | su | |
+| [ ] | systime | |
+| [ ] | tee | |
+| [ ] | test | |
+| [ ] | time | |
+| [x] | true | It works flawlessly.  100% compatible.  AMAZING! |
+| [ ] | uname | |
+| [ ] | users | |
+| [ ] | w | |
+| [ ] | what | |
+| [ ] | whereis | |
+| [ ] | which | |
+| [ ] | who | |
+| [ ] | xargs | |
+| [x] | yes | It works! I learned that yes takes an optional argument. |
