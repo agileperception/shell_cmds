@@ -16,6 +16,7 @@ dang issue, or join me on my
   porting is not really an option, because Rust sorta flipped C's nasty unsafe
   paradigm on its head.  So put some thought into it!
 - No pull requests.  Just push to master.  You might have to pull first ;-)
+- Lets use [clap](https://crates.io/crates/clap) for command-line-arguments, because it's more fun.
 
 # FAQ
 
@@ -24,7 +25,7 @@ dang issue, or join me on my
 | Why are you doing this?  | For fun.  I like learning Rust this way.|
 | Why don't you just use this other existing project...? | See last question.|
 | Will this make you rich? | Absolutely. As soon as a wealthy patron decides to dump money on me because I made a pass at re-implementing ancient BSD utilities in Rust, I'll totally be rich.|
-| Can I play too? | Yes. I'll even give you commit access. Hurry the heck up, it's lonely over here.|
+| Can I play too? | Yes. I'll even give you commit access. Hurry the heck up, it's lonely over here. Re-read the first paragraph of this readme for contact info.|
 | When will the project be done? | When it's not fun.  Or...HEY SQUIRREL!|
 
 # Organization...maybe
