@@ -9,12 +9,22 @@ dang issue, or join me on my
 
 # Fun Guidelines
 
-- Lets keep the commands and flags named exactly the same.
+- I'm targeting [shell_cmds version 198](https://opensource.apple.com/source/shell_cmds/shell_cmds-198/), because it's the shiniest at the moment.
+- Lets keep the command names and flag named exactly the same.
 - I don't give a flip about exact *behavior* compatibility or completeness.
 - The rust code should be as *idiomatic* as possible (aka do it the Rust ), which means line-by-line
   porting is not really an option, because Rust sorta flipped C's nasty unsafe
   paradigm on its head.  So put some thought into it!
 - No pull requests.  Just push to master.  You might have to pull first ;-)
+
+# FAQ
+
+Q. Why are you doing this?  A. For fun.  I like learning Rust this way.
+Q. Why don't you just use this other existing project...? A. See last question.
+Q. Will this make you rich? A. Absolutely. As soon as a wealthy patron decides
+   to dump money on me because I made a pass at re-implementing ancient BSD
+   utilities in Rust, I'll totally be rich.
+Q. Can I play too? A. Yes. I'll even give you commit access. Hurry the heck up, it's lonely over here.
 
 # Organization...maybe
 
