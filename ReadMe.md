@@ -19,13 +19,13 @@ dang issue, or join me on my
 
 # FAQ
 
-Q. Why are you doing this?  A. For fun.  I like learning Rust this way.
-Q. Why don't you just use this other existing project...? A. See last question.
-Q. Will this make you rich? A. Absolutely. As soon as a wealthy patron decides
-   to dump money on me because I made a pass at re-implementing ancient BSD
-   utilities in Rust, I'll totally be rich.
-Q. Can I play too? A. Yes. I'll even give you commit access. Hurry the heck up, it's lonely over here.
-Q. When will the project be done? A. When it's not fun.  Or...HEY SQUIRREL!
+| Question | Answer |
+|----------|--------|
+| Why are you doing this?  | For fun.  I like learning Rust this way.|
+| Why don't you just use this other existing project...? | See last question.|
+| Will this make you rich? | Absolutely. As soon as a wealthy patron decides to dump money on me because I made a pass at re-implementing ancient BSD utilities in Rust, I'll totally be rich.|
+| Can I play too? | Yes. I'll even give you commit access. Hurry the heck up, it's lonely over here.|
+| When will the project be done? | When it's not fun.  Or...HEY SQUIRREL!|
 
 # Organization...maybe
 
