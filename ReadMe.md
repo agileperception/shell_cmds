@@ -17,6 +17,9 @@ dang issue, or join me on my
   paradigm on its head.  So put some thought into it!
 - No pull requests.  Just push to master.  You might have to pull first ;-)
 - Lets use [clap](https://crates.io/crates/clap) for command-line-arguments, because it's more fun.
+- Lets make unit tests.  Running tests is fun.
+- Anyone know what to do with a man page (the .1 files)?  Do you just...use it as-is?
+
 
 # FAQ
 
