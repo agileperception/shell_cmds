@@ -20,6 +20,8 @@ dang issue, or join me on my
 - Lets make unit tests.  Running tests is fun.
 - Anyone know what to do with a man page (the .1 files)?  Do you just...use it as-is?
 - Better copy-n-paste the license from the original. Lawyer repellent.
+- Most of the original internal variable names are detestably awful. Rename them something meaningful, for heaven's sake.
+- Put inline comments asking for advice where you need it.  Maybe it would be nice to respond on discord and help that poor soul learn.  Like this:  `// Q: How do I do X? - CleanCut` because then you could easily generate a list of questions like this: `grep -r "// Q:" .`
 
 
 # FAQ
@@ -48,5 +50,5 @@ If there's a better way to do it, tell me about it.  Lets give it a shot.
 | Command | Status |
 |---------|--------|
 | true | It works flawlessly.  100% compatible.  I'm AMAZING. |
-| yes | Gonna do it next. |
+| yes | It works!  I have a question about flushing. |
 | Everything else | Who cares? Oh, you do? Then update this file, dangit! I'm a doctor, not a technical writer, Jim. |
