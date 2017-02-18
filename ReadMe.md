@@ -10,18 +10,22 @@ dang issue, or join me on my
 # Fun Guidelines
 
 - I'm targeting [shell_cmds version 198](https://opensource.apple.com/source/shell_cmds/shell_cmds-198/), because it's the shiniest at the moment.
-- Lets keep the command names and flag named exactly the same.
-- I don't give a flip about exact *behavior* compatibility or completeness.
-- The rust code should be as *idiomatic* as possible (aka do it the Rust ), which means line-by-line
-  porting is not really an option, because Rust sorta flipped C's nasty unsafe
-  paradigm on its head.  So put some thought into it!
+- Lets keep the command names and flags exactly the same.
+- The rust code should be as *idiomatic* as possible (aka do it the Rust way),
+  which means line-by-line porting is not really an option, because Rust sorta
+  flipped C's nasty unsafe paradigm on its head.  So put some thought into it!
 - No pull requests.  Just push to master.  You might have to pull first ;-)
-- Lets use [clap](https://crates.io/crates/clap) for command-line-arguments, because it's more fun.
+- Lets use [clap](https://crates.io/crates/clap) for the more complicated
+  command-line-arguments, because it's more fun.
 - Lets make unit tests.  Running tests is fun.
-- Anyone know what to do with a man page (the .1 files)?  Do you just...use it as-is?
-- Better copy-n-paste the license from the original. Lawyer repellent.
-- Most of the original internal variable names are detestably awful. Rename them something meaningful, for heaven's sake.
-- Put inline comments asking for advice where you need it.  Maybe it would be nice to respond on discord and help that poor soul learn.  Like this:  `// Q: How do I do X? - CleanCut` because then you could easily generate a list of questions like this: `grep -r "// Q:" .`
+- Anyone know what to do with the man pages (the .1 files)?  I put them in `man/`
+- I put the companion shell scripts in `sh/`
+- When there's a license header in the source code, I'm copying that over.
+  Lawyer repellent.
+- Most of the original internal variable names are detestably awful. Rename
+  them something meaningful, for heaven's sake.
+- Some of the code is as buggy as I've ever seen.  How does sleep get away with
+  it's ridiculous bugs for over 20 years?  Lets accidentally not port the bugs.
 
 
 # FAQ
@@ -81,7 +85,7 @@ If there's a better way to do it, tell me about it.  Lets give it a shot.
 | [ ] | seq | |
 | [ ] | sh | |
 | [ ] | shlock | |
-| [ ] | sleep | |
+| [x] | sleep | Instead of treating invalid input as 0 silently, we spit out the usage and die. |
 | [ ] | su | |
 | [ ] | systime | |
 | [ ] | tee | |
