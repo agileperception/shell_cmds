@@ -59,7 +59,7 @@ If there's a better way to do it, tell me about it.  Lets give it a shot.
 | [ ] | chroot | |
 | [ ] | date | |
 | [ ] | dirname | |
-| [ ] | echo | |
+| [x] | echo | Strings are a pain in Rust.  Eventually, they'll get easier. |
 | [ ] | env | |
 | [ ] | expr | |
 | [x] | false | Simple. |
