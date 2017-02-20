@@ -1,9 +1,8 @@
 # Rust port of Apple's [shell_cmds](https://opensource.apple.com/source/shell_cmds/shell_cmds-198/)
 
-This is my project to port a bunch of Apple's utilities from C to Rust to
-learn.  And have fun.  And learn while I have fun.  Would you like to have some
-fun too? If you think it might be fun, tell me and I'll grant you commit
-access.  To contact me, either make an issue, or join me on my
+This is my project to port a bunch of Apple's utilities from C to Rust to learn
+and have fun.  If you would like to join in, please contact me by making an
+issue or joining my
 [RustProgramming Discord Channel](https://discord.gg/pR7hBBe)
 
 # Guidelines
@@ -21,8 +20,7 @@ access.  To contact me, either make an issue, or join me on my
 - Lets make unit tests.  Running tests is fun.
 - Put the man pages (files ending in `.1`) in the `man/` directory.
 - Put the companion shell scripts in the `sh/` directory.
-- When there's a license header, copy it over verbatim.  Lawyer repellent.
-
+- When there's a license header, copy it over verbatim. (Lawyer repellent.)
 
 # Contributing
 
@@ -31,15 +29,17 @@ access.  To contact me, either make an issue, or join me on my
 - To run your new command `echo`: `cargo run --bin echo`
 
 - If there's some *actually* duplicated or reusable code somewhere, lets put it
-in a properly named library module.  Like `src/echo.rs` or something relevant.
+  in a properly named library module.  Like `src/echo.rs` or something relevant.
 
-If there's a better way to do it, tell me about it.  Lets give it a shot.
+- If there's a better way to do it, tell me about it.  Lets give it a shot.
 
 # Command Status
 
 * [ ] alias
 * [ ] apply
-* [x] basename - Ancient utilities are frustrating because their behavior with arguments makes no blasted sense.  `basename` is one of these.  If it has exactly two arguments, then it acts completely differently.
+* [x] basename - Ancient utilities are frustrating because their behavior with
+  arguments makes no blasted sense.  `basename` is one of these.  If it has
+  exactly two arguments, then it acts completely differently.
 * [ ] chroot
 * [ ] date
 * [x] dirname - Shares a man page with basename.
@@ -69,13 +69,14 @@ If there's a better way to do it, tell me about it.  Lets give it a shot.
 * [ ] seq
 * [ ] sh
 * [ ] shlock
-* [x] sleep - Instead of treating invalid input as 0 silently, we spit out the usage and die.
+* [x] sleep - Instead of treating invalid input as 0 silently, we spit out the
+  usage and die.
 * [ ] su
 * [ ] systime
 * [ ] tee
 * [ ] test
 * [ ] time
-* [x] true - It works flawlessly.  100% compatible.  AMAZING!
+* [x] true - Simple.
 * [ ] uname
 * [ ] users
 * [ ] w

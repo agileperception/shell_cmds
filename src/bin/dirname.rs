@@ -31,20 +31,8 @@
  * SUCH DAMAGE.
  */
 
-fn dirname<'a>(input : &'a str) -> &'a str {
-    // Trim any trailing slashes
-    let mut result = input.trim_right_matches('/');
-    // Delete from the last slash to the end
-    if let Some(index) = result.rfind('/') {
-        result = &result[..index];
-    }
-    result
-}
-
-fn usage() {
-    println!("usage: dirname path");
-    std::process::exit(1);
-}
+extern crate shell_cmds;
+use shell_cmds::dirname::{dirname, usage};
 
 fn main() {
     let args : Vec<String> = std::env::args().collect();
@@ -58,4 +46,11 @@ fn main() {
     }
 
     println!("{}", dirname(&args[1]));
+}
+
+#[cfg(test)]
+mod tests {
+    #[test]
+    fn it_works() {
+    }
 }

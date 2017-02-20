@@ -1,3 +1,5 @@
+pub mod dirname;
+
 #[cfg(test)]
 mod tests {
     #[test]
