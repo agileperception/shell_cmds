@@ -51,53 +51,53 @@ If there's a better way to do it, tell me about it.  Lets give it a shot.
 
 # Status of Stuff
 
-| Done | Command | Comments |
-|------|---------|----------|
-| [ ] | alias | |
-| [ ] | apply | |
-| [x] something | basename | Ancient utilities are frustrating because their behavior with arguments makes no blasted sense.  `basename` is one of these.  If it has exactly two arguments, then it acts completely differently. |
-| [ ] | chroot | |
-| [ ] | date | |
-| [x] | dirname | Shares a man page with basename. |
-| [x] | echo | Strings are a pain in Rust.  Eventually, they'll get easier. |
-| [ ] | env | |
-| [ ] | expr | |
-| [x] | false | Simple. |
-| [ ] | find | |
-| [ ] | getopt | |
-| [ ] | hexdump | |
-| [ ] | hostname | |
-| [ ] | id | |
-| [ ] | jot | |
-| [ ] | kill | |
-| [ ] | killall | |
-| [ ] | lastcomm | |
-| [ ] | locate | |
-| [ ] | logname | |
-| [ ] | mktemp | |
-| [ ] | nice | |
-| [ ] | nohup | |
-| [ ] | path_helper | |
-| [ ] | printenv | |
-| [ ] | pwd | |
-| [ ] | renice | |
-| [ ] | script | |
-| [ ] | seq | |
-| [ ] | sh | |
-| [ ] | shlock | |
-| [x] | sleep | Instead of treating invalid input as 0 silently, we spit out the usage and die. |
-| [ ] | su | |
-| [ ] | systime | |
-| [ ] | tee | |
-| [ ] | test | |
-| [ ] | time | |
-| [x] | true | It works flawlessly.  100% compatible.  AMAZING! |
-| [ ] | uname | |
-| [ ] | users | |
-| [ ] | w | |
-| [ ] | what | |
-| [ ] | whereis | |
-| [ ] | which | |
-| [ ] | who | |
-| [ ] | xargs | |
-| [x] | yes | It works! I learned that yes takes an optional argument. |
+| Command | Comments |
+|---------|----------|
+| * [ ] alias | |
+| * [ ] apply | |
+| * [x] basename | Ancient utilities are frustrating because their behavior with arguments makes no blasted sense.  `basename` is one of these.  If it has exactly two arguments, then it acts completely differently. |
+| * [ ] chroot | |
+| * [ ] date | |
+| * [x] dirname | Shares a man page with basename. |
+| * [x] echo | Strings are a pain in Rust.  Eventually, they'll get easier. |
+| * [ ] env | |
+| * [ ] expr | |
+| * [x] false | Simple. |
+| * [ ] find | |
+| * [ ] getopt | |
+| * [ ] hexdump | |
+| * [ ] hostname | |
+| * [ ] id | |
+| * [ ] jot | |
+| * [ ] kill | |
+| * [ ] killall | |
+| * [ ] lastcomm | |
+| * [ ] locate | |
+| * [ ] logname | |
+| * [ ] mktemp | |
+| * [ ] nice | |
+| * [ ] nohup | |
+| * [ ] path_helper | |
+| * [ ] printenv | |
+| * [ ] pwd | |
+| * [ ] renice | |
+| * [ ] script | |
+| * [ ] seq | |
+| * [ ] sh | |
+| * [ ] shlock | |
+| * [x] sleep | Instead of treating invalid input as 0 silently, we spit out the usage and die. |
+| * [ ] su | |
+| * [ ] systime | |
+| * [ ] tee | |
+| * [ ] test | |
+| * [ ] time | |
+| * [x] true | It works flawlessly.  100% compatible.  AMAZING! |
+| * [ ] uname | |
+| * [ ] users | |
+| * [ ] w | |
+| * [ ] what | |
+| * [ ] whereis | |
+| * [ ] which | |
+| * [ ] who | |
+| * [ ] xargs | |
+| * [x] yes | It works! I learned that yes takes an optional argument. |
