@@ -15,8 +15,8 @@ dang issue, or join me on my
   which means line-by-line porting is not really an option, because Rust sorta
   flipped C's nasty unsafe paradigm on its head.  So put some thought into it!
 - No pull requests.  Just push to master.  You might have to pull first ;-)
-- Lets use [clap](https://crates.io/crates/clap) for the more complicated
-  command-line-arguments, because it's more fun.
+- Lets use `std::env::args()` directly for the dirt-simple utilities.  Lets use
+  [clap](https://crates.io/crates/clap) for the fancier ones.
 - Lets make unit tests.  Running tests is fun.
 - Anyone know what to do with the man pages (the .1 files)?  I put them in `man/`
 - I put the companion shell scripts in `sh/`
@@ -55,7 +55,7 @@ If there's a better way to do it, tell me about it.  Lets give it a shot.
 |------|---------|----------|
 | [ ] | alias | |
 | [ ] | apply | |
-| [ ] | basename | |
+| [x] | basename | Ancient utilities are frustrating because their behavior with arguments makes no blasted sense.  `basename` is one of these.  If it has exactly two arguments, then it acts completely differently. |
 | [ ] | chroot | |
 | [ ] | date | |
 | [ ] | dirname | |
