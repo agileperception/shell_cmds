@@ -1,55 +1,41 @@
-#Port Apple's BSD shell_cmds - aka Rust for the fun of it!
+# Rust port of Apple's [shell_cmds](https://opensource.apple.com/source/shell_cmds/shell_cmds-198/)
 
-It'sfun to learn Rust by porting stuff to Rust.  This is my project to port a
-bunchof Apple's BSD utilities so I can have fun and learn.  And have fun.  And
-learnwhile I have fun.  Maybe it's fun for you too.  If you think it might be
-fun,tell me and I'll grant you commit access.  To contact me, either make a
-dangissue, or join me on my
-[RustProgrammingDiscord Channel](https://discord.gg/pR7hBBe)
+This is my project to port a bunch of Apple's utilities from C to Rust to
+learn.  And have fun.  And learn while I have fun.  Would you like to have some
+fun too? If you think it might be fun, tell me and I'll grant you commit
+access.  To contact me, either make an issue, or join me on my
+[RustProgramming Discord Channel](https://discord.gg/pR7hBBe)
 
-#Fun Guidelines
+# Guidelines
 
--I'm targeting [shell_cmds version 198](https://opensource.apple.com/source/shell_cmds/shell_cmds-198/), because it's the shiniest at the moment.
--Lets keep the command names and flags exactly the same.
--The rust code should be as *idiomatic* as possible (aka do it the Rust way),
- which means line-by-line porting is not really an option, because Rust sorta
- flipped C's nasty unsafe paradigm on its head.  So put some thought into it!
--No pull requests.  Just push to master.  You might have to pull first ;-)
--Lets use `std::env::args()` directly for the dirt-simple utilities.  Lets use
- [clap](https://crates.io/crates/clap) for the fancier ones.
--Lets make unit tests.  Running tests is fun.
--Anyone know what to do with the man pages (the .1 files)?  I put them in `man/`
--I put the companion shell scripts in `sh/`
--When there's a license header in the source code, I'm copying that over.
- Lawyer repellent.
--Most of the original internal variable names are detestably awful. Rename
- them something meaningful, for heaven's sake.
--Some of the code is as buggy as I've ever seen.  How does sleep get away with
- it's ridiculous bugs for over 20 years?  Lets accidentally not port the bugs.
+- I'm targeting [shell_cmds version 198](https://opensource.apple.com/source/shell_cmds/shell_cmds-198/)
+- Keep command names and flags exactly the same.
+- The rust code should be as *idiomatic* as possible (aka do it the Rust way)
+- Most of the original internal variable names are detestably awful. Rename
+  them something meaningful, for heaven's sake.
+- There's a bunch of ~25-year-old bugs.  Don't bother porting the bugs.
+- No pull requests.  Just push to master.  You might have to pull first ;-)
+- Use `std::env::args()` directly for the dirt-simple utilities.  Use
+  [clap](https://crates.io/crates/clap) for the fancier ones (even though it
+  means our argument parsing will look and behave nicer).
+- Lets make unit tests.  Running tests is fun.
+- Put the man pages (files ending in `.1`) in the `man/` directory.
+- Put the companion shell scripts in the `sh/` directory.
+- When there's a license header, copy it over verbatim.  Lawyer repellent.
 
 
-#FAQ
+# Contributing
 
-|Question | Answer |
-|----------|--------|
-|Why are you doing this?  | For fun.  I like learning Rust this way.|
-|Why don't you just use this other existing project...? | See last question.|
-|Will this make you rich? | Absolutely. As soon as a wealthy patron decides to dump money on me because I made a pass at re-implementing ancient BSD utilities in Rust, I'll totally be rich.|
-|Can I play too? | Yes. I'll even give you commit access. Hurry the heck up, it's lonely over here. Re-read the first paragraph of this readme for contact info.|
-|When will the project be done? | When it's not fun.  Or...HEY SQUIRREL!|
+- Commands need a file in `src/bin/` with a `fn main()`.  For example `echo` has `src/bin/echo.rs`
 
-#Organization...maybe
+- To run your new command `echo`: `cargo run --bin echo`
 
-Itmight work nicely to make a `src/bin/command.rs` for each `command` you want to implement.  Put a `fn main()` in it.
+- If there's some *actually* duplicated or reusable code somewhere, lets put it
+in a properly named library module.  Like `src/echo.rs` or something relevant.
 
-Torun your new command: `cargo run --bin command`
+If there's a better way to do it, tell me about it.  Lets give it a shot.
 
-Ifthere's some *actually* duplicated or reusable code somewhere, lets put it
-ina properly named library module.  Like `src/awesome.rs` or something relevant.
-
-Ifthere's a better way to do it, tell me about it.  Lets give it a shot.
-
-#Status of Stuff
+# Command Status
 
 * [ ] alias
 * [ ] apply
