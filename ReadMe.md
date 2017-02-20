@@ -55,10 +55,10 @@ If there's a better way to do it, tell me about it.  Lets give it a shot.
 |------|---------|----------|
 | [ ] | alias | |
 | [ ] | apply | |
-| [x] | basename | Ancient utilities are frustrating because their behavior with arguments makes no blasted sense.  `basename` is one of these.  If it has exactly two arguments, then it acts completely differently. |
+| [x] something | basename | Ancient utilities are frustrating because their behavior with arguments makes no blasted sense.  `basename` is one of these.  If it has exactly two arguments, then it acts completely differently. |
 | [ ] | chroot | |
 | [ ] | date | |
-| [ ] | dirname | |
+| [x] | dirname | Shares a man page with basename. |
 | [x] | echo | Strings are a pain in Rust.  Eventually, they'll get easier. |
 | [ ] | env | |
 | [ ] | expr | |
