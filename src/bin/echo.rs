@@ -48,6 +48,6 @@ fn main () {
     }
     // Unless the user specificed "-n" as the first argument, end with a newline
     if add_newline {
-        print!("\n");
+        println!("");
     }
 }

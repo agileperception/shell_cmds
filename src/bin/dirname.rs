@@ -33,9 +33,9 @@
 
 /// Logic for the dirname command
 /// See the manpage for dirname/basename (they share a man page)
-fn dirname<'a>(input : &'a str) -> String {
+fn dirname(input : &str) -> String {
     // Special Case: Empty String
-    if input.len() == 0 {
+    if input.is_empty() {
         return ".".to_string()
     }
     // Trim whitespace, then convert to a vector of characters
@@ -58,11 +58,8 @@ fn dirname<'a>(input : &'a str) -> String {
     }
 
     // Delete anything after the last slash, inclusive
-    match (&characters[1..]).iter().rposition(|&x| x == '/') {
-        Some(index) => {
-            characters.resize(index + 1, '#');
-        },
-        None => {},
+    if let Some(index) = (&characters[1..]).iter().rposition(|&x| x == '/') {
+        characters.resize(index + 1, '#');
     }
 
     // Remove trailing slashes (but not the starting slash) AGAIN
@@ -92,7 +89,7 @@ fn main() {
         usage();
     }
 
-    if (&args[1]).starts_with("-") {
+    if (&args[1]).starts_with('-') {
         usage();
     }
 

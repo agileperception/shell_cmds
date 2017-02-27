@@ -44,7 +44,7 @@ fn basename<'a>(input: &'a str, suffix: &str) -> &'a str {
         result = &result[index+1..];
     }
     // Remove the suffix if we find one, unless that's all that is left
-    if (suffix.len() > 0)
+    if !suffix.is_empty()
     && (result.len() > suffix.len())
     && result.ends_with(suffix) {
         result = &result[..result.len()-suffix.len()];
