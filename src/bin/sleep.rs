@@ -38,24 +38,21 @@ fn usage_and_die() {
 
 fn str_to_duration(duration_str : &str) -> Result<Duration, &'static str> {
 
-    //let mut time_float = 0.0;
-    //if let Ok::<f64, std::num::ParseFloatError>(parsed) = duration_str.trim().parse() {
-        //time_float = parsed; // warning: value assigned to `time_float` is never read
-    //} else {
-        //return Err("Could not parse to float.");
-    //}
+    // WORKS!
+    let mut time_float : f64 = match duration_str.trim().parse() {
+        Ok(x) => x,
+        Err(_) => {
+            return Err("Could not parse to float.");
+        }
+    };
 
-    //let mut time_float : f64 = match duration_str.trim().parse() {
-        //Ok(x) => x,
-        //Err(_) => {
-            //return Err("Could not parse to float.");
-            //0.0   // With this line: warning: unreachable expression, without: expected floating-point variable
-        //}
-    //};
+    // A 2nd alternative...
+    //let mut time_float = duration_str.trim().parse::<f64>()
+        //.or(Err("Could not parse to float."))?;
 
-    // This one works without warnings!  Need to learn what "?" does...
-    let mut time_float = duration_str.trim().parse::<f64>()
-        .or(Err("Could not parse to float."))?;
+    // A 3rd alteranitive...
+    // I think this would work if I implemented std::num::ParseFloatError
+    // let mut time_float = duration_str.trim().parse::<f64>()?; 
 
     if time_float < 0.0 {
         return Err("Negative time.")
