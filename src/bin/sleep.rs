@@ -36,21 +36,34 @@ fn usage_and_die() {
     std::process::exit(1);
 }
 
-fn get_duration_from_str(duration_str : &str) -> Duration {
-    let mut time_float : f64 = match duration_str.trim().parse() {
-        Ok(x) => x,
-        Err(_) => {
-            usage_and_die();
-            0.0
-        }
-    };
+fn str_to_duration(duration_str : &str) -> Result<Duration, &'static str> {
+
+    //let mut time_float = 0.0;
+    //if let Ok::<f64, std::num::ParseFloatError>(parsed) = duration_str.trim().parse() {
+        //time_float = parsed; // warning: value assigned to `time_float` is never read
+    //} else {
+        //return Err("Could not parse to float.");
+    //}
+
+    //let mut time_float : f64 = match duration_str.trim().parse() {
+        //Ok(x) => x,
+        //Err(_) => {
+            //return Err("Could not parse to float.");
+            //0.0   // With this line: warning: unreachable expression, without: expected floating-point variable
+        //}
+    //};
+
+    // This one works without warnings!  Need to learn what "?" does...
+    let mut time_float = duration_str.trim().parse::<f64>()
+        .or(Err("Could not parse to float."))?;
+
     if time_float < 0.0 {
-        usage_and_die();
+        return Err("Negative time.")
     } 
     if time_float > std::u64::MAX as f64 {
         time_float = std::u64::MAX as f64;
     }
-    Duration::new(time_float.trunc() as u64, (time_float.fract() * 1000000000.0) as u32)
+    Ok(Duration::new(time_float.trunc() as u64, (time_float.fract() * 1000000000.0) as u32))
 }
 
 #[cfg(test)]
@@ -58,8 +71,19 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test_get_duration_from_str() {
-        assert_eq!(Duration::new(0, 0), get_duration_from_str("0"));
+    fn test_integers() {
+        assert_eq!(Ok(Duration::new(0, 0)), str_to_duration("0"));
+        assert_eq!(Ok(Duration::new(1, 0)), str_to_duration("1"));
+        assert_eq!(Ok(Duration::new(5, 0)), str_to_duration("5"));
+        assert_eq!(Ok(Duration::new(360, 0)), str_to_duration("360"));
+    }
+
+    #[test]
+    fn test_floats() {
+        assert_eq!(Ok(Duration::new(0, 0)), str_to_duration("0.0"));
+        assert_eq!(Ok(Duration::new(1, 0)), str_to_duration("1"));
+        assert_eq!(Ok(Duration::new(5, 0)), str_to_duration("5"));
+        assert_eq!(Ok(Duration::new(360, 0)), str_to_duration("360"));
     }
 }
 
@@ -82,7 +106,13 @@ fn main() {
         usage_and_die();
     }
 
-    let duration = get_duration_from_str(&time_string);
+    let duration = match str_to_duration(&time_string) {
+        Ok(x) => x,
+        Err(_) => {
+            usage_and_die();
+            Duration::new(0, 0)
+        },
+    };
 
     thread::sleep(duration);
 }
