@@ -31,9 +31,60 @@
  * SUCH DAMAGE.
  */
 
-extern crate shell_cmds;
-use shell_cmds::dirname::{dirname, usage};
+/// Logic for the dirname command
+/// See the manpage for dirname/basename (they share a man page)
+fn dirname<'a>(input : &'a str) -> String {
+    // Special Case: Empty String
+    if input.len() == 0 {
+        return ".".to_string()
+    }
+    // Trim whitespace, then convert to a vector of characters
+    let mut characters : Vec<char> = input.trim().chars().collect();
 
+    // Remove trailing slashes (but not the starting slash)
+    while match (&characters[1..]).last() {
+        Some(x) => (*x == '/'),
+        None => false,
+    } {
+        characters.pop();
+    }
+
+    // Special Case: No Slashes remaining after initial trailing slashes removed
+    match characters.iter().position(|&x| x == '/') {
+        Some(_) => {},
+        None => {
+            return ".".to_string();
+        }
+    }
+
+    // Delete anything after the last slash, inclusive
+    match (&characters[1..]).iter().rposition(|&x| x == '/') {
+        Some(index) => {
+            characters.resize(index + 1, '#');
+        },
+        None => {},
+    }
+
+    // Remove trailing slashes (but not the starting slash) AGAIN
+    // This isn't mentioned in the manpage, but is the actual behavior.
+    // Am I just preserving a bug???
+    while match (&characters[1..]).last() {
+        Some(x) => (*x == '/'),
+        None => false,
+    } {
+        characters.pop();
+    }
+
+    characters.into_iter().collect()
+}
+
+/// Usage string for the dirname command
+fn usage() {
+    println!("usage: dirname path");
+    std::process::exit(1);
+}
+
+/// MAIN!
 fn main() {
     let args : Vec<String> = std::env::args().collect();
 
@@ -48,9 +99,51 @@ fn main() {
     println!("{}", dirname(&args[1]));
 }
 
+/// TESTS
 #[cfg(test)]
 mod tests {
+    use super::dirname;
+
     #[test]
-    fn it_works() {
+    fn test_trailing_slashes() {
+        assert_eq!(dirname("/path/to/dir/"), "/path/to");
+        assert_eq!(dirname("/path/to/file.txt/"), "/path/to");
+        assert_eq!(dirname("/path/to/dir//"), "/path/to");
+        assert_eq!(dirname("/"), "/");
+        assert_eq!(dirname("//"), "/");
+    }
+
+    #[test]
+    fn test_dot() {
+        // DIRNAME(3)
+        // If path is [...] the empty string, or contains no '/' characters, dirname() returns
+        // [...] the string ".", signifying the current directory.
+        assert_eq!(dirname(""), ".");
+        assert_eq!(dirname("a"), ".");
+        assert_eq!(dirname("rust"), ".");
+        assert_eq!(dirname("file.ext"), ".");
+    }
+
+    #[test]
+    fn test_multiple_intersticial_slashes() {
+        assert_eq!(dirname("a///b"), "a");
+        assert_eq!(dirname("/a///b"), "/a");
+        // preserving behavior...or just preserving a bug???
+        assert_eq!(dirname("a///b/c"), "a///b");
+        assert_eq!(dirname("/a///b/c"), "/a///b");
+        assert_eq!(dirname("///a///b"), "///a");
+    }
+
+    #[test]
+    fn test_normal() {
+        assert_eq!(dirname("a/b/c"), "a/b");
+        assert_eq!(dirname("/a/b/c"), "/a/b");
+    }
+
+    #[test]
+    fn test_extensions() {
+        assert_eq!(dirname("a/b/file.ext"), "a/b");
+        assert_eq!(dirname("/a/b/file.ext"), "/a/b");
     }
 }
+

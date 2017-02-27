@@ -27,13 +27,42 @@
  * SUCH DAMAGE.
  */
 
-use std::{env, thread, time};
+use std::{env, thread};
+use std::time::Duration;
 use std::io::Write;
 
 fn usage_and_die() {
     writeln!(&mut std::io::stderr(), "usage: sleep seconds").unwrap();
     std::process::exit(1);
 }
+
+fn get_duration_from_str(duration_str : &str) -> Duration {
+    let mut time_float : f64 = match duration_str.trim().parse() {
+        Ok(x) => x,
+        Err(_) => {
+            usage_and_die();
+            0.0
+        }
+    };
+    if time_float < 0.0 {
+        usage_and_die();
+    } 
+    if time_float > std::u64::MAX as f64 {
+        time_float = std::u64::MAX as f64;
+    }
+    Duration::new(time_float.trunc() as u64, (time_float.fract() * 1000000000.0) as u32)
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_get_duration_from_str() {
+        assert_eq!(Duration::new(0, 0), get_duration_from_str("0"));
+    }
+}
+
 
 fn main() {
     let args: Vec<String> = env::args().collect();
@@ -53,20 +82,7 @@ fn main() {
         usage_and_die();
     }
 
-    let mut time_float : f64 = match time_string.trim().parse() {
-        Ok(x) => x,
-        Err(_) => {
-            usage_and_die();
-            0.0
-        }
-    };
-    if time_float < 0.0 {
-        usage_and_die();
-    } 
-    if time_float > std::u64::MAX as f64 {
-        time_float = std::u64::MAX as f64;
-    }
-    let duration = time::Duration::new(time_float.trunc() as u64, (time_float.fract() * 1000000000.0) as u32);
+    let duration = get_duration_from_str(&time_string);
 
     thread::sleep(duration);
 }
