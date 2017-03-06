@@ -34,8 +34,11 @@
  * SUCH DAMAGE.
  */
 
+#[macro_use(value_t)]
 extern crate clap;
 use clap::{Arg, App};
+
+use std::str::FromStr;
 
 fn errx(msg : &str) {
     if !msg.is_empty() {
@@ -66,24 +69,26 @@ fn main() {
         .arg(Arg::with_name("command")
              .required(true)
              .takes_value(true))
-        .arg(Arg::with_name("arguments")
+        .arg(Arg::with_name("command_arguments")
              .required(true)
              .multiple(true)
              .takes_value(true))
         .get_matches();
 
-    let magic_char = value_t!(args.value_of("magic_char"), char)
-        .unwrap_or_else(|e| errx("illegal magic character specification"));
+    let magic_char = args.value_of("magic_char").unwrap();
+    if magic_char.len() != 1 {
+        errx("illegal magic character specification");
+    }
 
     let debug = args.is_present("debug");
 
     let command = args.value_of("command").unwrap();
 
-    //let 
+    let command_arguments : Vec<&str> = args.values_of("command_arguments").unwrap().collect();
 
     // Set num_args_at_a_time based off of one of the -0123456789 arguments.
-    let num_args_at_a_time : u8 = 99;
-    for number_str in ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"] {
+    let mut num_args_at_a_time : u8 = 1;
+    for number_str in ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"].iter() {
         if args.is_present(number_str) {
             if num_args_at_a_time != 99 {
                 errx("only one -# argument may be specified");
@@ -91,11 +96,33 @@ fn main() {
             num_args_at_a_time = u8::from_str(number_str).unwrap();
         }
     }
-    if num_args_at_a_time == 99 {
-        num_args_at_a_time = 1;
-    }
 
     // Presence of magic character numbers overrides -0123456789 arguments.
+    // The logic is to use the highest numerical value seen
+    for number_char in ["9", "8", "7", "6", "5", "4", "3", "2", "1"].iter() {
+        let mut search_str = String::with_capacity(2);
+        search_str += magic_char;
+        search_str += number_char;
+        if let Some(_) = command.find(&search_str) {
+            num_args_at_a_time = u8::from_str(number_char).unwrap();
+            break;
+        }
+    }
+
+    let shell = match std::env::var("SHELL") {
+        Ok(s) => s,
+        // Note: The old BSD code uses the value of _PATH_BSHELL from /usr/include/paths.h, which
+        // appears to have been /bin/sh for the last 20 years.
+        Err(_) => "/bin/sh".to_string(),
+    };
+
+    println!("shell is {}", shell);
+    println!("num_args_at_a_time is {}", num_args_at_a_time);
+    println!("command is {}", command);
+    println!("command_arguments are {:?}", command_arguments);
+    println!("debug is {}", debug);
+    println!("magic_char is {:?}", magic_char);
+
 
 
 }
