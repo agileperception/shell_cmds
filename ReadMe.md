@@ -5,45 +5,35 @@ and have fun.  If you would like to join in, please contact me by making an
 issue or joining my
 [RustProgramming Discord Channel](https://discord.gg/pR7hBBe)
 
-# Guidelines
-
-- I'm targeting [shell_cmds version 198](https://opensource.apple.com/source/shell_cmds/shell_cmds-198/)
-- Keep command names and flags exactly the same.
-- The rust code should be as *idiomatic* as possible (aka do it the Rust way)
-- Most of the original internal variable names are detestably awful. Rename
-  them something meaningful, for heaven's sake.
-- There's a bunch of ~25-year-old bugs.  Don't bother porting the bugs.
-- No pull requests.  Just push to master.  You might have to pull first ;-)
-- Use `std::env::args()` directly for the dirt-simple utilities.  Use
-  [clap](https://crates.io/crates/clap) for the fancier ones (even though it
-  means our argument parsing will look and behave nicer).
-- Lets make unit tests.  Running tests is fun.
-- Put the man pages (files ending in `.1`) in the `man/` directory.
-- Put the companion shell scripts in the `sh/` directory.
-- When there's a license header, copy it over verbatim. (Lawyer repellent.)
-
 # Contributing
+
+- We're porting [shell_cmds version 198](https://opensource.apple.com/source/shell_cmds/shell_cmds-198/)
 
 - Commands need a file in `src/bin/` with a `fn main()`.  For example `echo` has `src/bin/echo.rs`
 
-- To run your new command `echo`: `cargo run --bin echo`
+- To compile+run your new command `echo arg1 arg2`: `cargo run --bin echo -- arg1 arg2`
 
-- If there's some *actually* duplicated or reusable code somewhere, lets put it
-  in a properly named library module.  Like `src/echo.rs` or something relevant.
+- Use `std::env::args()` directly for the dirt-simple utilities.  Use
+  [clap](https://crates.io/crates/clap) for the fancier ones (even though it
+  means our argument parsing will look and behave nicer).
 
-- If there's a better way to do it, tell me about it.  Lets give it a shot.
+- Put the man pages (files ending in `.1`) in the `man/` directory.
+
+- Put the companion shell scripts in the `sh/` directory.
+
+- When there's a license header, copy it over verbatim. (Lawyer repellent.)
 
 # Command Status
 
 * [ ] alias
-* [ ] apply
+* [x] apply - Some serious pointer-loop reverse engineering on this one.
 * [x] basename - Ancient utilities are frustrating because their behavior with
   arguments makes no blasted sense.  `basename` is one of these.  If it has
   exactly two arguments, then it acts completely differently.
 * [ ] chroot
 * [ ] date
 * [x] dirname - Shares a man page with basename.
-* [x] echo - Strings are a pain in Rust.  Eventually, they'll get easier.
+* [x] echo - Got an educiation in rust Strings.
 * [ ] env
 * [ ] expr
 * [x] false - Simple.
@@ -85,4 +75,4 @@ issue or joining my
 * [ ] which
 * [ ] who
 * [ ] xargs
-* [x] yes - It works! I learned that yes takes an optional argument.
+* [x] yes - It works! Did you know that yes takes an optional argument?

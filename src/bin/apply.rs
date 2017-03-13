@@ -83,7 +83,9 @@ fn main() {
 
     let command = args.value_of("command").unwrap();
 
-    let command_arguments : Vec<&str> = args.values_of("command_arguments").unwrap().collect();
+    // Note that command_argument is reversed so we can just use .pop() to get the next item.
+    let mut command_arguments : Vec<&str> = args.values_of("command_arguments").unwrap().collect();
+    command_arguments.reverse();
 
     // Set num_args_per_command based off of one of the -0123456789 arguments.
     let mut num_args_per_command : i8 = -1;
@@ -96,27 +98,34 @@ fn main() {
         }
     }
 
-    // Find the highest numerical value seen in the command string
-    let mut max_argnum_in_command : i8 = 0;
+    // Find the highest magic digit seen in the command string
+    let mut max_magic_digit_in_command : i8 = 0;
     for number_char in &["9", "8", "7", "6", "5", "4", "3", "2", "1"] {
         let mut search_str = String::with_capacity(2);
         search_str += magic_char;
         search_str += number_char;
         if command.find(&search_str).is_some() {
-            max_argnum_in_command = i8::from_str(number_char).unwrap();
+            max_magic_digit_in_command = i8::from_str(number_char).unwrap();
             break;
         }
     }
 
+    // Figure out which shell to use to run the command.  Prefer the user's chosen shell.
     let shell = match std::env::var("SHELL") {
         Ok(s) => s,
         // Note: The old BSD code uses the value of _PATH_BSHELL from /usr/include/paths.h, which
-        // appears to have been /bin/sh for the last 20 years.
+        // appears to have been /bin/sh for time immemorial.
         Err(_) => "/bin/sh".to_string(),
     };
 
+    // Build the command template
     let mut command_template = String::from_str("exec ").unwrap();
-    if max_argnum_in_command == 0 {
+    if max_magic_digit_in_command != 0 {
+        // Magic digits were in the command, so use it.
+        command_template.push_str(command);
+        num_args_per_command = max_magic_digit_in_command;
+    } else {
+        // No magic digits in command.  Add num_args_per_command of them to the command template.
         if num_args_per_command == -1 {
             num_args_per_command = 1;
         }
@@ -126,21 +135,50 @@ fn main() {
             command_template.push_str(magic_char);
             command_template.push_str(&(i.to_string()));
         }
-        // XXX
-    } else {
-        command_template.push_str(command);
-        num_args_per_command = max_argnum_in_command;
-        
     }
 
-    println!("shell is {}", shell);
-    println!("debug is {}", debug);
-    println!("magic_char is {:?}", magic_char);
-    println!("num_args_per_command is {}", num_args_per_command);
-    println!("max_argnum_in_command is {}", max_argnum_in_command);
-    println!("command is {}", command);
-    println!("command_arguments are {:?}", command_arguments);
-    println!("command_template is {}", command_template)
+    // Build each command & run it
+    loop {
+        // Build a command by substituting command_arguments into the magic spots
+        let mut current_command = command_template.clone();
+        let mut last_argument = "";
+        for i in 1..num_args_per_command+1 {
+            // Get the current argument
+            let current_arg = match command_arguments.pop() {
+                Some(arg) => arg,
+                None => {
+                    errx(format!("expecting additional argument{} after \"{}\"",
+                                 if i < num_args_per_command - 1 { "s" } else { "" },
+                                 last_argument).as_str());
+                    "dummy"
+                }
+            };
+            // Find the magic digit location to insert the current argument
+            let mut magic_str = String::with_capacity(2);
+            magic_str += magic_char;
+            magic_str += &(i.to_string());
+            current_command = current_command.replace(&magic_str, &current_arg);
+            
+            last_argument = current_arg;
+        }
 
-
+        // Actually run the command
+        if debug {
+            println!("current_command: {}", current_command);
+        } else {
+            match std::process::Command::new(&shell)
+                .arg("-c")
+                .arg(&current_command)
+                .status() {
+                    Ok(_) => {},
+                    Err(_) => {
+                        errx(format!("Error running command \"{}\"", current_command).as_str());
+                    }
+            };
+        }
+        
+        if command_arguments.is_empty() {
+            break;
+        }
+    }
 }
