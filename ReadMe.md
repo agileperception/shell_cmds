@@ -63,7 +63,7 @@ issue or joining my
   usage and die.
 * [ ] su
 * [ ] systime
-* [-] tee - Work has begun
+* [  ] tee - Work has begun
 * [ ] test
 * [ ] time
 * [x] true - Simple.

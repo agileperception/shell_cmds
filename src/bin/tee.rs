@@ -33,7 +33,9 @@
 
 
 extern crate clap;
+extern crate libc;
 use clap::{Arg, App};
+use libc::{signal, SIGINT, SIG_IGN};
 
 fn main() {
     let args = App::new("tee")
@@ -45,5 +47,11 @@ fn main() {
              .takes_value(true))
         .get_matches();
 
+    // Ignore SIGINT?
+    if args.is_present("ignore_sigint") {
+        unsafe {
+            signal(SIGINT, SIG_IGN);
+        }
+    }
 }
 

@@ -1,7 +1,8 @@
 [package]
 name = "shell_cmds"
 version = "0.1.0"
-authors = ["Nathan Stocks <nathan.stocks@gmail.com>"]
+authors = ["Nathan Stocks <nathan@agileperception.com>"]
 
 [dependencies]
 clap = "2.20.5"
+libc = "0.2"
