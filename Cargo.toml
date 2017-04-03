@@ -6,3 +6,4 @@ authors = ["Nathan Stocks <nathan@agileperception.com>"]
 [dependencies]
 clap = "2.20.5"
 libc = "0.2"
+getopts = "0.2"

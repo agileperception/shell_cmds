@@ -1,27 +1,27 @@
 # Rust port of Apple's [shell_cmds](https://opensource.apple.com/source/shell_cmds/shell_cmds-198/)
 
-This is my project to port a bunch of Apple's utilities from C to Rust to learn
-and have fun.  If you would like to join in, please contact me by making an
-issue or joining my
-[RustProgramming Discord Channel](https://discord.gg/pR7hBBe)
+Port Apple's shell commands from C to Rust.
 
 # Contributing
 
-- We're porting [shell_cmds version 198](https://opensource.apple.com/source/shell_cmds/shell_cmds-198/)
+-  Want to help? Contact me by
+   [creating an issue](https://github.com/agileperception/shell_cmds/issues/new)
+   or join my [RustProgramming Discord Channel](https://discord.gg/pR7hBBe)
+
+- Code to port: [shell_cmds version 198](https://opensource.apple.com/source/shell_cmds/shell_cmds-198/)
 
 - Commands need a file in `src/bin/` with a `fn main()`.  For example `echo` has `src/bin/echo.rs`
 
-- To compile+run your new command `echo arg1 arg2`: `cargo run --bin echo -- arg1 arg2`
+- To compile+run your new command (for example) `echo arg1 arg2` you would do `cargo run --bin echo -- arg1 arg2`
 
 - Use `std::env::args()` directly for the dirt-simple utilities.  Use
-  [clap](https://crates.io/crates/clap) for the fancier ones (even though it
-  means our argument parsing will look and behave nicer).
+  [getopts](https://doc.rust-lang.org/getopts/getopts/index.html) for the fancier ones.
 
 - Put the man pages (files ending in `.1`) in the `man/` directory.
 
 - Put the companion shell scripts in the `sh/` directory.
 
-- When there's a license header, copy it over verbatim. (Lawyer repellent.)
+- When there's a license header, copy it over verbatim into the `.rs` file for the binary. (Lawyer repellent.)
 
 # Command Status
 
@@ -33,7 +33,7 @@ issue or joining my
 * [ ] chroot
 * [ ] date
 * [x] dirname - Shares a man page with basename.
-* [x] echo - Got an educiation in rust Strings.
+* [x] echo - Got an education in rust Strings.
 * [ ] env
 * [ ] expr
 * [x] false - Simple.
@@ -63,7 +63,7 @@ issue or joining my
   usage and die.
 * [ ] su
 * [ ] systime
-* [  ] tee - Work has begun
+* [x] tee - Done.  Good practice with `Vec`, `zip()`, `stdin/stdout/stderr`, and files.
 * [ ] test
 * [ ] time
 * [x] true - Simple.
@@ -75,4 +75,4 @@ issue or joining my
 * [ ] which
 * [ ] who
 * [ ] xargs
-* [x] yes - It works! Did you know that yes takes an optional argument?
+* [x] yes - Did you know that `yes` takes an optional argument?
