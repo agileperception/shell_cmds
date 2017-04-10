@@ -25,7 +25,7 @@ Port Apple's shell commands from C to Rust.
 
 # Command Status
 
-* [ ] alias
+* [x] alias - Just a man page pointer to `builtin.1`, which is `csh`'s manpage.
 * [x] apply - Some serious pointer-loop reverse engineering on this one.
 * [x] basename - Ancient utilities are frustrating because their behavior with
   arguments makes no blasted sense.  `basename` is one of these.  If it has
