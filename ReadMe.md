@@ -52,7 +52,7 @@ Port Apple's shell commands from C to Rust.
 * [ ] nice
 * [ ] nohup
 * [ ] path_helper
-* [ ] printenv
+* [x] printenv - Done. Did you know printenv silently ignores any extra arguments?
 * [ ] pwd
 * [ ] renice
 * [ ] script
