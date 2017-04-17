@@ -30,7 +30,7 @@ Port Apple's shell commands from C to Rust.
 * [x] basename - Ancient utilities are frustrating because their behavior with
   arguments makes no blasted sense.  `basename` is one of these.  If it has
   exactly two arguments, then it acts completely differently.
-* [ ] chroot
+* [ ] chroot - In Progress
 * [ ] date
 * [x] dirname - Shares a man page with basename.
 * [x] echo - Got an education in rust Strings.
