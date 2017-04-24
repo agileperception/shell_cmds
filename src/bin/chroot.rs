@@ -36,7 +36,8 @@ extern crate libc;
 
 use getopts::Options;
 use std::env;
-use libc::{c_int, chroot, gid_t, setgid, setgroups, setuid, uid_t};
+use std::ffi::CString;
+use libc::{c_int, chroot, getgrnam, gid_t, setgid, setgroups, setuid, uid_t};
 
 
 fn usage() {
@@ -48,9 +49,16 @@ fn get_group_id(group: String) -> gid_t {
     if let Ok(group_id) = group.parse::<gid_t>() {
         return group_id;
     }
-    // TODO: Parse by group name, fail if we can't
-
-    return 0;
+    let cstring = CString::new(group).unwrap();
+    unsafe {
+        let group_struct = getgrnam(cstring.as_ptr());
+        if group_struct.is_null() {
+            println!("no such group {}", cstring.into_string().unwrap());
+            std::process::exit(1);
+        } else {
+            return (*group_struct).gr_gid;
+        }
+    }
 }
 
 fn main() {
@@ -71,27 +79,39 @@ fn main() {
         usage();
         std::process::exit(1);
     }
-    let newroot = matches.free.get(0).expect("Vec lied to us about its length.");
+    let newroot = matches.free.get(0).unwrap();
 
     // The BSD version used the value of NGROUPS_MAX from /usr/include/sys/syslimits.h
     // We should probably do that too instead of hard-coding it here
     const NGROUPS_MAX: i32 = 16;
 
+    let mut group_id : gid_t = 0;
+    if matches.opt_present("group") {
+        let group = matches.opt_str("group").unwrap();
+        group_id = get_group_id(group);
+        println!("{}", group_id);
+    }
     if matches.opt_present("user") {
-        let user = matches.opt_str("user").expect("getopts lied to us about user");
+        let user = matches.opt_str("user").unwrap();
         // TODO: do the stuff here...
     }
-    if matches.opt_present("group") {
-        let group = matches.opt_str("group").expect("getopts lied to us about group");
-        let group_id = get_group_id(group);
-        // TODO: Are we done here?
-    }
     if matches.opt_present("grouplist") {
-        let grouplist = matches.opt_str("grouplist").expect("getopts lied to us about grouplist");
+        let grouplist = matches.opt_str("grouplist").unwrap();
         // TODO: do the stuff here...
     }
 
     // TODO: Perform the chroot
+    // TODO: Set Group List IDs
+    // TODO: Set Group ID
+    if matches.opt_present("group") {
+        unsafe {
+            if setgid(group_id) < 0 {
+                println!("chroot: setgid");
+                std::process::exit(1);
+            }
+        }
+    }
+    // TODO: Set UID
 
     // Run a user-supplied command
     if let Some(command) = matches.free.get(1) {
