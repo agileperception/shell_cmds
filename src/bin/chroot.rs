@@ -37,14 +37,15 @@ extern crate libc;
 use getopts::Options;
 use std::env;
 use std::ffi::CString;
-use libc::{c_int, chroot, getgrnam, gid_t, setgid, setgroups, setuid, uid_t};
+use libc::{c_int, chroot, getgrnam, getpwnam, gid_t, setgid, setgroups, setuid, uid_t};
 
 
 fn usage() {
     println!("usage: chroot [-g group] [-G group,group,...] [-u user] newroot [command]");
 }
 
-fn get_group_id(group: String) -> gid_t {
+fn get_group_id<S: Into<String>>(group: S) -> gid_t {
+    let group = group.into();
     // Maybe it's a number
     if let Ok(group_id) = group.parse::<gid_t>() {
         return group_id;
@@ -57,6 +58,24 @@ fn get_group_id(group: String) -> gid_t {
             std::process::exit(1);
         } else {
             return (*group_struct).gr_gid;
+        }
+    }
+}
+
+fn get_user_id<S: Into<String>>(user: S) -> uid_t {
+    let user = user.into();
+    // Maybe it's a number
+    if let Ok(user_id) = user.parse::<uid_t>() {
+        return user_id;
+    }
+    let cstring = CString::new(user).unwrap();
+    unsafe {
+        let user_struct = getpwnam(cstring.as_ptr());
+        if user_struct.is_null() {
+            println!("no such user {}", cstring.into_string().unwrap());
+            std::process::exit(1);
+        } else {
+            return (*user_struct).pw_uid;
         }
     }
 }
@@ -81,28 +100,44 @@ fn main() {
     }
     let newroot = matches.free.get(0).unwrap();
 
-    // The BSD version used the value of NGROUPS_MAX from /usr/include/sys/syslimits.h
-    // We should probably do that too instead of hard-coding it here
-    const NGROUPS_MAX: i32 = 16;
-
+    // Resolve the group argument into a gid
     let mut group_id : gid_t = 0;
     if matches.opt_present("group") {
         let group = matches.opt_str("group").unwrap();
         group_id = get_group_id(group);
         println!("{}", group_id);
     }
-    if matches.opt_present("user") {
-        let user = matches.opt_str("user").unwrap();
-        // TODO: do the stuff here...
-    }
+    // Resolve the grouplist argument into a vector of gids
+    let mut grouplist_ids : Vec<gid_t> = Vec::new();
     if matches.opt_present("grouplist") {
         let grouplist = matches.opt_str("grouplist").unwrap();
-        // TODO: do the stuff here...
+        let grouplist_vec: Vec<&str> = grouplist.split(',').collect();
+        for grouplist_entry in grouplist_vec {
+            grouplist_ids.push(get_group_id(grouplist_entry));
+        }
+        println!("{:?}", grouplist_ids);
+    }
+    // Resolve the user argument into a uid
+    let mut user_id : uid_t = 0;
+    if matches.opt_present("user") {
+        let user = matches.opt_str("user").unwrap();
+        user_id = get_user_id(user);
+        println!("{}", user_id);
     }
 
     // TODO: Perform the chroot
-    // TODO: Set Group List IDs
-    // TODO: Set Group ID
+    // TODO: We'll need to use libc::strerror right here to match the error output...
+
+    // Order of setgroups, setgid, and setuid calls are preserved from original -- because I don't
+    // know if the order makes any difference.
+    if matches.opt_present("grouplist") {
+        unsafe {
+            if setgroups(grouplist_ids.len() as i32, grouplist_ids.as_ptr()) < 0 {
+                println!("chroot: setgroups");
+                std::process::exit(1);
+            }
+        }
+    }
     if matches.opt_present("group") {
         unsafe {
             if setgid(group_id) < 0 {
@@ -111,7 +146,14 @@ fn main() {
             }
         }
     }
-    // TODO: Set UID
+    if matches.opt_present("user") {
+        unsafe {
+            if setuid(user_id) < 0 {
+                println!("chroot: setuid");
+                std::process::exit(1);
+            }
+        }
+    }
 
     // Run a user-supplied command
     if let Some(command) = matches.free.get(1) {

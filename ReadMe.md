@@ -1,8 +1,10 @@
-# Rust port of Apple's [shell_cmds](https://opensource.apple.com/source/shell_cmds/shell_cmds-198/)
+Rust port of Apple's [shell_cmds](https://opensource.apple.com/source/shell_cmds/shell_cmds-198/)
+=================================
 
 Port Apple's shell commands from C to Rust.
 
-# Contributing
+Contributing
+============
 
 -  Want to help? Contact me by
    [creating an issue](https://github.com/agileperception/shell_cmds/issues/new)
@@ -23,7 +25,8 @@ Port Apple's shell commands from C to Rust.
 
 - When there's a license header, copy it over verbatim into the `.rs` file for the binary. (Lawyer repellent.)
 
-# Command Status
+Porting Status
+==============
 
 * [x] alias - Just a man page pointer to `builtin.1`, which is `csh`'s manpage.
 * [x] apply - Some serious pointer-loop reverse engineering on this one.
@@ -76,3 +79,20 @@ Port Apple's shell commands from C to Rust.
 * [ ] who
 * [ ] xargs
 * [x] yes - Did you know that `yes` takes an optional argument?
+
+Bugs in Original
+================
+
+Below is a partial list of bugs discovered in C code of Apple's [shell_cmds version 198](https://opensource.apple.com/source/shell_cmds/shell_cmds-198/) -- which ships on macOS Sierra.
+
+chroot.c
+--------
+
+- If more than 16 valid groups are provided to the `-G` option, then the
+  `gidlist` buffer overflows and starts overwriting later data in the stack
+  frame with resolved group ids.  That is not difficult to do since macOS ships
+  with over 100 valid groups by default.  In Rust, we use a `Vec` to store the
+  resolved group ids.  `Vec` is dynamically sized, so it won't overflow.
+
+
+
