@@ -37,8 +37,12 @@ extern crate libc;
 use getopts::Options;
 use std::env;
 use std::ffi::CString;
-use libc::{c_int, chroot, getgrnam, getpwnam, gid_t, setgid, setgroups, setuid, uid_t};
+use libc::{c_int, chdir, chroot, execvp, execlp, getgrnam, getpwnam, gid_t, setgid, setgroups, setuid, strerror, uid_t};
 
+#[link(name = "c")]
+extern {
+    static mut errno: c_int;
+}
 
 fn usage() {
     println!("usage: chroot [-g group] [-G group,group,...] [-u user] newroot [command]");
@@ -125,15 +129,32 @@ fn main() {
         println!("{}", user_id);
     }
 
-    // TODO: Perform the chroot
-    // TODO: We'll need to use libc::strerror right here to match the error output...
+    // Change directory
+    let newroot_c = CString::new(newroot.to_string()).unwrap();
+    unsafe {
+        if chdir(newroot_c.as_ptr()) < 0 {
+            let err_msg = CString::from_raw(strerror(errno));
+            println!("chroot: {}: {}", newroot, err_msg.into_string().unwrap());
+            std::process::exit(1);
+        }
+    }
+    // Perform chroot
+    let dot_dir = CString::new(".").unwrap();
+    unsafe {
+        if chroot(dot_dir.as_ptr()) < 0 {
+            let err_msg = CString::from_raw(strerror(errno));
+            println!("chroot: {}: {}", newroot, err_msg.into_string().unwrap());
+            std::process::exit(1);
+        }
+    }
 
     // Order of setgroups, setgid, and setuid calls are preserved from original -- because I don't
     // know if the order makes any difference.
     if matches.opt_present("grouplist") {
         unsafe {
             if setgroups(grouplist_ids.len() as i32, grouplist_ids.as_ptr()) < 0 {
-                println!("chroot: setgroups");
+                let err_msg = CString::from_raw(strerror(errno));
+                println!("chroot: setgroups: {}", err_msg.into_string().unwrap());
                 std::process::exit(1);
             }
         }
@@ -141,7 +162,8 @@ fn main() {
     if matches.opt_present("group") {
         unsafe {
             if setgid(group_id) < 0 {
-                println!("chroot: setgid");
+                let err_msg = CString::from_raw(strerror(errno));
+                println!("chroot: setgid: {}", err_msg.into_string().unwrap());
                 std::process::exit(1);
             }
         }
@@ -149,7 +171,8 @@ fn main() {
     if matches.opt_present("user") {
         unsafe {
             if setuid(user_id) < 0 {
-                println!("chroot: setuid");
+                let err_msg = CString::from_raw(strerror(errno));
+                println!("chroot: setuid: {}", err_msg.into_string().unwrap());
                 std::process::exit(1);
             }
         }
@@ -157,11 +180,18 @@ fn main() {
 
     // Run a user-supplied command
     if let Some(command) = matches.free.get(1) {
-        // TODO: Actually run the command...
-        println!("In root {} executing {}", newroot, command);
+        let command_c = CString::new(command.as_str()).unwrap();
+        unsafe {
+            execvp(command_c.as_ptr(), &command_c.as_ptr());
+            let err_msg = CString::from_raw(strerror(errno));
+            println!("{}: {}", command, err_msg.into_string().unwrap());
+        }
+        std::process::exit(1);
     }
 
-    // Just run a shell.  Prefer the user's chosen shell.
+    // No user-supplied command.  Run a shell instead.
+
+    // Determine which shell we should use
     let shell = match std::env::var("SHELL") {
         Ok(s) => s,
         // Note: The old BSD code uses the value of _PATH_BSHELL from /usr/include/paths.h, which
@@ -170,7 +200,13 @@ fn main() {
         Err(_) => "/bin/sh".to_string(),
     };
 
-    // TODO: Actually run the shell
-    println!("In root {} running shell {}", newroot, shell);
-
+    // Run the shell
+    let shell_c = CString::new(shell.as_str()).unwrap();
+    let dash_i_c = CString::new("-i").unwrap();
+    unsafe {
+        execlp(shell_c.as_ptr(), shell_c.as_ptr(), dash_i_c.as_ptr());
+        let err_msg = CString::from_raw(strerror(errno));
+        println!("{}: {}", shell, err_msg.into_string().unwrap());
+    }
+    std::process::exit(1);
 }

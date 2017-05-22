@@ -33,7 +33,7 @@ Porting Status
 * [x] basename - Ancient utilities are frustrating because their behavior with
   arguments makes no blasted sense.  `basename` is one of these.  If it has
   exactly two arguments, then it acts completely differently.
-* [ ] chroot - In Progress
+* [x] chroot - Many calls to libc.  Seems to have matched behavior exactly, except for the buffer overflow vulnerability.
 * [ ] date
 * [x] dirname - Shares a man page with basename.
 * [x] echo - Got an education in rust Strings.
@@ -88,11 +88,12 @@ Below is a partial list of bugs discovered in C code of Apple's [shell_cmds vers
 chroot.c
 --------
 
-- If more than 16 valid groups are provided to the `-G` option, then the
-  `gidlist` buffer overflows and starts overwriting later data in the stack
-  frame with resolved group ids.  That is not difficult to do since macOS ships
-  with over 100 valid groups by default.  In Rust, we use a `Vec` to store the
-  resolved group ids.  `Vec` is dynamically sized, so it won't overflow.
+- Buffer Overflow: If more than 16 valid groups are provided to the `-G`
+  option, then the `gidlist` buffer overflows and starts overwriting later data
+  in the stack frame with resolved group ids.  That is not difficult to do
+  since macOS ships with over 100 valid groups by default.  In Rust, we use a
+  `Vec` to store the resolved group ids.  `Vec` is dynamically sized, so it
+  won't overflow.
 
 
 
