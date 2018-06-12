@@ -6,9 +6,8 @@ Port Apple's shell commands from C to Rust.
 Contributing
 ============
 
--  Want to help? Contact me by
+-  Want to help? Jump right in! If you would rather talk first then contact me by
    [creating an issue](https://github.com/agileperception/shell_cmds/issues/new)
-   or join my [RustProgramming Discord Channel](https://discord.gg/pR7hBBe)
 
 - Code to port: [shell_cmds version 198](https://opensource.apple.com/source/shell_cmds/shell_cmds-198/)
 
